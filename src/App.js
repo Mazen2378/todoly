@@ -1,20 +1,14 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import Todos from './Todos';
+import Form from './components/Form';
+import Todos from './components/Todos';
 
 function App() {
-	const [input, setInput] = useState('');
 	const [todos, setTodos] = useState(
-		JSON.parse(localStorage.getItem('todos')) || [{ id: 0, name: 'mazen' }]
+		JSON.parse(localStorage.getItem('todos')) || [
+			{ id: 0, name: 'mazen', category: 'default' },
+		]
 	);
-	const addTodo = e => {
-		e.preventDefault();
-		setTodos([
-			...todos,
-			{ id: todos.length ? todos[todos.length - 1].id + 1 : 0, name: input },
-		]);
-		setInput('');
-	};
 	const removeTodo = todo => {
 		setTodos(todos.filter(item => item.id !== todo.id));
 	};
@@ -24,20 +18,9 @@ function App() {
 	return (
 		<div className='container'>
 			<h1>Your Todos</h1>
-			<form onSubmit={e => addTodo(e)}>
-				<input
-					type='text'
-					id='addtodo'
-					value={input}
-					onChange={e => {
-						setInput(e.target.value);
-					}}
-					placeholder='Add todo...'
-					autoComplete='off'
-				/>
-			</form>
+			<Form setTodos={setTodos} todos={todos} />
 			<div className='todos-container'>
-				<Todos removeTodo={removeTodo} todos={todos} />
+				<Todos removeTodo={removeTodo} todos={todos} setTodos={setTodos} />
 			</div>
 		</div>
 	);
